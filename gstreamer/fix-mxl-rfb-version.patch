@@ -1,0 +1,49 @@
+diff --git a/subprojects/gst-plugins-bad/gst/librfb/gstrfbsrc.c b/subprojects/gst-plugins-bad/gst/librfb/gstrfbsrc.c
+index ef4abc080d..e29d99466a 100644
+--- a/subprojects/gst-plugins-bad/gst/librfb/gstrfbsrc.c
++++ b/subprojects/gst-plugins-bad/gst/librfb/gstrfbsrc.c
+@@ -241,21 +241,25 @@ gst_rfb_src_finalize (GObject * object)
+ static void
+ gst_rfb_property_set_version (GstRfbSrc * src, gchar * value)
+ {
+-  gchar *major;
++  gchar *major = NULL;
+   gchar *minor;
+ 
+-  g_return_if_fail (src != NULL);
+-  g_return_if_fail (value != NULL);
++  if (src == NULL || value == NULL) {
++    goto error_exit;
++  }
+ 
+   major = g_strdup (value);
+   minor = g_strrstr (value, ".");
+ 
+-  g_return_if_fail (minor != NULL);
++  if (minor == NULL) {
++    goto error_exit;
++  }
+ 
+   *minor++ = 0;
+ 
+-  g_return_if_fail (g_ascii_isdigit (*major) == TRUE);
+-  g_return_if_fail (g_ascii_isdigit (*minor) == TRUE);
++  if (g_ascii_isdigit (*major) == FALSE || g_ascii_isdigit (*minor) == FALSE) {
++    goto error_exit;
++  }
+ 
+   src->version_major = g_ascii_digit_value (*major);
+   src->version_minor = g_ascii_digit_value (*minor);
+@@ -265,6 +269,12 @@ gst_rfb_property_set_version (GstRfbSrc * src, gchar * value)
+ 
+   g_free (major);
+   g_free (value);
++  return;
++error_exit:
++  GST_WARNING_OBJECT (src,
++      "Unable to set version %s", GST_STR_NULL(value));
++  g_free (major);
++  g_free (value);
+ }
+ 
+ static gchar *

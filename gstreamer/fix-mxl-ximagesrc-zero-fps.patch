@@ -1,0 +1,13 @@
+diff --git a/subprojects/gst-plugins-good/sys/ximage/gstximagesrc.c b/subprojects/gst-plugins-good/sys/ximage/gstximagesrc.c
+index 3e379e18ae..c9d4efdd8f 100644
+--- a/subprojects/gst-plugins-good/sys/ximage/gstximagesrc.c
++++ b/subprojects/gst-plugins-good/sys/ximage/gstximagesrc.c
+@@ -58,7 +58,7 @@ GST_DEBUG_CATEGORY_STATIC (gst_debug_ximage_src);
+ static GstStaticPadTemplate t =
+ GST_STATIC_PAD_TEMPLATE ("src", GST_PAD_SRC, GST_PAD_ALWAYS,
+     GST_STATIC_CAPS ("video/x-raw, "
+-        "framerate = (fraction) [ 0, MAX ], "
++        "framerate = (fraction) [ 1, MAX ], "
+         "width = (int) [ 1, MAX ], " "height = (int) [ 1, MAX ], "
+         "pixel-aspect-ratio = (fraction) [ 0, MAX ]"));
+ 
