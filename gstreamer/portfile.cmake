@@ -8,9 +8,9 @@ vcpkg_from_gitlab(
     GITLAB_URL https://gitlab.freedesktop.org
     OUT_SOURCE_PATH SOURCE_PATH
     REPO gstreamer/gstreamer
-    # Use latest main branch, because gstcuda.h is not included in the official release:
-    REF 3883ae8c2a79961384790446d7c4e3101c5c1963
-    SHA512 a6f8ef88c5ea60d43001c47fc6154d90c46d0e46738a4d166e01adf8d709b2a2c1621206fe3ccb35aa90ce57af3af82e82f78f52d0be42ef0ccfc357eb43c41f
+    # Use future 1.23 version, because gstcuda.h is not included in the official release:
+    REF 5621b1030aa3de639f3ce5f324de71246e932884
+    SHA512 4f73d34e11b7b24a8410c8067ff53622b0b2b417a990cf27e852c215113168099d217d379cf7ce98f5ab33c240683f9503c3a0e6794daadf4764c97976524163
     # REF ${VERSION}
     # SHA512 62af86f943c5f6e00cb570083ddd974ffc03eb571ab7e6a709db5a7537b2b8a096482ef9f7c60fef4315d0d4df0cc3f653207c8c22e63018542834205b1f457d
     HEAD_REF main
@@ -28,6 +28,7 @@ vcpkg_from_gitlab(
         # srtp_fix.patch
         fix-bz2-windows-debug-dependency.patch
         base-must-be-enabled.patch
+        # no-downloads.patch
         ${PATCHES}
 )
 
@@ -100,6 +101,7 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
 
         plugins-bad     bad
         aes             gst-plugins-bad:aes
+        aom             gst-plugins-bad:aom
         assrender       gst-plugins-bad:assrender
         bzip2-bad       gst-plugins-bad:bz2
         chromaprint     gst-plugins-bad:chromaprint
@@ -221,7 +223,7 @@ vcpkg_configure_meson(
         -Dgst-plugins-good:pulse=${PLUGIN_GOOD_PULSE}
         -Dgst-plugins-good:qt5=disabled
         -Dgst-plugins-good:shout2=disabled
-        -Dgst-plugins-good:soup=disabled
+        # -Dgst-plugins-good:soup=disabled
         -Dgst-plugins-good:twolame=disabled
         -Dgst-plugins-good:waveform=auto
         -Dgst-plugins-good:wavpack=disabled # Error during plugin build

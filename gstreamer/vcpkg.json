@@ -55,6 +55,20 @@
         }
       ]
     },
+    "aom": {
+      "description": "Enable support for the Alliance for Open Media (AOM) AV1 encoder and decoder",
+      "supports": "!windows",
+      "dependencies": [
+        "aom",
+        {
+          "name": "gstreamer",
+          "default-features": false,
+          "features": [
+            "plugins-bad"
+          ]
+        }
+      ]
+    },
     "asio": {
       "description": "Enable support for the Steinberg Audio Streaming Input Output (ASIO) library (Windows only)",
       "dependencies": [
@@ -632,6 +646,19 @@
           ]
         },
         "soundtouch"
+      ]
+    },
+    "soup": {
+      "description": "Enable support for the soup plugin",
+      "dependencies": [
+        {
+          "name": "gstreamer",
+          "default-features": false,
+          "features": [
+            "plugins-good"
+          ]
+        },
+        "libsoup"
       ]
     },
     "speex": {
