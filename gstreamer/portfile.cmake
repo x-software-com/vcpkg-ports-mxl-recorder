@@ -55,7 +55,7 @@ endif()
 
 if(VCPKG_TARGET_IS_LINUX)
     set(PLUGIN_BAD_OPENGL enabled)
-    set(PLUGIN_BAD_WAYLAND auto) # RHEL 7 missing at least wayland-protocols
+    set(PLUGIN_BAD_WAYLAND enabled)
     set(PLUGIN_BAD_VULKAN auto) # RHEL 8 has no glslc
     set(PLUGIN_GOOD_PULSE enabled)
 else()
