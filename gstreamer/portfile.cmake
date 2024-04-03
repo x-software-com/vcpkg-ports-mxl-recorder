@@ -8,11 +8,8 @@ vcpkg_from_gitlab(
     GITLAB_URL https://gitlab.freedesktop.org
     OUT_SOURCE_PATH SOURCE_PATH
     REPO gstreamer/gstreamer
-    # Use future 1.23 version, because gstcuda.h is not included in the official release:
-    REF 5621b1030aa3de639f3ce5f324de71246e932884
-    SHA512 4f73d34e11b7b24a8410c8067ff53622b0b2b417a990cf27e852c215113168099d217d379cf7ce98f5ab33c240683f9503c3a0e6794daadf4764c97976524163
-    # REF ${VERSION}
-    # SHA512 62af86f943c5f6e00cb570083ddd974ffc03eb571ab7e6a709db5a7537b2b8a096482ef9f7c60fef4315d0d4df0cc3f653207c8c22e63018542834205b1f457d
+    REF "${VERSION}"
+    SHA512 769637e4e2307265bfe878979f2c53b337e13f0366c78323baacc3c7c80cbb6ae6a16e5a4136512bb2711e2a30d72b1c40209f8f25df3dc19e9f1a7bbbb47cbe
     HEAD_REF main
     PATCHES
         fix-mxl-matroska-meta.patch
@@ -24,10 +21,10 @@ vcpkg_from_gitlab(
         fix-clang-cl-good.patch
         # fix-clang-cl-bad.patch
         fix-clang-cl-ugly.patch
-        gstreamer-disable-no-unused.patch
+        # gstreamer-disable-no-unused.patch
         # srtp_fix.patch
         fix-bz2-windows-debug-dependency.patch
-        base-must-be-enabled.patch
+        # base-must-be-enabled.patch
         # no-downloads.patch
         ${PATCHES}
 )
@@ -261,7 +258,7 @@ vcpkg_configure_meson(
         -Dgst-plugins-bad:gsm=disabled
         -Dgst-plugins-bad:ipcpipeline=auto
         -Dgst-plugins-bad:iqa=disabled
-        -Dgst-plugins-bad:kate=disabled
+        # -Dgst-plugins-bad:kate=disabled
         -Dgst-plugins-bad:kms=disabled
         -Dgst-plugins-bad:ladspa=disabled
         -Dgst-plugins-bad:ldac=disabled
