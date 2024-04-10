@@ -13,6 +13,7 @@ vcpkg_from_gitlab(
     HEAD_REF main
     PATCHES
         fix-mxl-matroska-meta.patch
+        fix-mxl-matroska-tags.patch
         fix-mxl-rfb-version.patch
         fix-mxl-ximagesrc-zero-fps.patch
         fix-clang-cl.patch
