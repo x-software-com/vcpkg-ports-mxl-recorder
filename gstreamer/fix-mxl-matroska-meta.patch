@@ -1,14 +1,16 @@
 diff --git a/subprojects/gst-plugins-good/gst/matroska/matroska-mux.c b/subprojects/gst-plugins-good/gst/matroska/matroska-mux.c
-index e6144328f8..847ab25b0d 100644
+index e6144328f8..712d7cf506 100644
 --- a/subprojects/gst-plugins-good/gst/matroska/matroska-mux.c
 +++ b/subprojects/gst-plugins-good/gst/matroska/matroska-mux.c
-@@ -318,6 +318,18 @@ gst_matroska_mux_class_init (GstMatroskaMuxClass * klass)
+@@ -318,6 +318,20 @@ gst_matroska_mux_class_init (GstMatroskaMuxClass * klass)
    gobject_class = (GObjectClass *) klass;
    gstelement_class = (GstElementClass *) klass;
  
 +
 +  gst_tag_register_static ("GEOMETRY", GST_TAG_FLAG_META, G_TYPE_STRING,
 +      "GEOMETRY", "The stream geometry.", NULL);
++  gst_tag_register_static ("SOURCE_ID", GST_TAG_FLAG_META, G_TYPE_STRING,
++      "SOURCE_ID", "The stream source id.", NULL);
 +  gst_tag_register_static ("NEXT_UUID", GST_TAG_FLAG_META, G_TYPE_STRING,
 +      "NEXT_UUID", "Next file UUID.", NULL);
 +  gst_tag_register_static ("CURRENT_UUID", GST_TAG_FLAG_META, G_TYPE_STRING,
@@ -21,11 +23,12 @@ index e6144328f8..847ab25b0d 100644
    gst_element_class_add_static_pad_template (gstelement_class,
        &videosink_templ);
    gst_element_class_add_static_pad_template (gstelement_class,
-@@ -3461,6 +3473,11 @@ gst_matroska_tag_conv[] = {
+@@ -3461,6 +3475,12 @@ gst_matroska_tag_conv[] = {
        GST_MATROSKA_TAG_ID_COMPOSER, GST_TAG_COMPOSER}, {
        GST_MATROSKA_TAG_ID_LEAD_PERFORMER, GST_TAG_PERFORMER}, {
        GST_MATROSKA_TAG_ID_GENRE, GST_TAG_GENRE}
 +      ,{"GEOMETRY", "GEOMETRY"}
++      ,{"SOURCE_ID", "SOURCE_ID"}
 +      ,{"NEXT_UUID", "NEXT_UUID"}
 +      ,{"CURRENT_UUID", "CURRENT_UUID"}
 +      ,{"PREVIOUS_UUID", "PREVIOUS_UUID"}
