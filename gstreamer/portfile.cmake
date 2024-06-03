@@ -307,9 +307,11 @@ vcpkg_configure_meson(
         -Dgst-plugins-bad:isac=disabled
     OPTIONS_RELEASE
         -Dgobject-cast-checks=disabled
-        -Dglib-asserts=disabled
-        -Dglib-checks=disabled
-        -Dgstreamer:extra-checks=disabled
+        # Glib asserts, glib checks and GStreamer extra checks are not disabled in ArchLinux build:
+        # https://gitlab.archlinux.org/archlinux/packaging/packages/gstreamer/-/blob/f7119550d0f1355d6df96112082d79dcb5299df5/PKGBUILD
+        # -Dglib-asserts=disabled
+        # -Dglib-checks=disabled
+        # -Dgstreamer:extra-checks=disabled
     ADDITIONAL_BINARIES
         flex='${FLEX}'
         bison='${BISON}'
