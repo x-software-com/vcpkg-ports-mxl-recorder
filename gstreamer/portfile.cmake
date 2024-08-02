@@ -34,6 +34,9 @@ vcpkg_find_acquire_program(FLEX)
 vcpkg_find_acquire_program(BISON)
 vcpkg_find_acquire_program(NASM)
 
+# Add the path to the wayland-scanner binary
+vcpkg_add_to_path(PREPEND "${CURRENT_INSTALLED_DIR}/tools/wayland")
+
 if(VCPKG_TARGET_IS_OSX)
     # In Darwin platform, there can be an old version of `bison`,
     # Which can't be used for `gst-build`. It requires 2.4+
