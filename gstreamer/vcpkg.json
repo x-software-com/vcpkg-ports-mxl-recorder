@@ -7,14 +7,6 @@
   "license": "LGPL-2.0-only",
   "supports": "!uwp & !xbox",
   "dependencies": [
-    "mxl-mesa",
-    "libva",
-    {
-      "name": "wayland-protocols",
-      "features": [
-        "force-build"
-      ]
-    },
     "glib",
     {
       "name": "glib",
