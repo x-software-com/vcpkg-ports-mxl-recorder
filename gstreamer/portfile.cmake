@@ -16,6 +16,7 @@ vcpkg_from_gitlab(
         fix-mxl-matroska-tags.patch
         fix-mxl-rfb-version.patch
         fix-mxl-ximagesrc-zero-fps.patch
+        fix-mxl-cuda-ctx-flags.patch
         fix-clang-cl.patch
         # fix-clang-cl-gstreamer.patch
         # fix-clang-cl-base.patch
