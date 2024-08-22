@@ -190,7 +190,7 @@ vcpkg_configure_meson(
         -Ddoc=disabled
         -Dgtk_doc=disabled
         # gstreamer
-        -Dgstreamer:check=disabled
+        -Dgstreamer:check=enabled
         -Dgstreamer:libunwind=disabled
         -Dgstreamer:libdw=disabled
         -Dgstreamer:dbghelp=disabled
