@@ -173,7 +173,7 @@ vcpkg_configure_meson(
         -Dlibnice=disabled
         -Ddevtools=disabled
         -Drtsp_server=disabled
-        -Dvaapi=enabled
+        -Dvaapi=auto # VAAPI is only available on x86 Linux, but not on AArch64
         -Dsharp=disabled
         -Drs=disabled
         -Dgst-examples=disabled
