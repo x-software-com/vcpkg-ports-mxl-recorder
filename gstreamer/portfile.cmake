@@ -9,7 +9,7 @@ vcpkg_from_gitlab(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO gstreamer/gstreamer
     REF "${VERSION}"
-    SHA512 38d0da5d4c3e74d8723d9b34d882cd78c927653ca53a37495eb085c3b961fc5e84d1dda8c57ce104dae368095764f1ac0e91e07f27e619333ae812fbe8264781
+    SHA512 6b429a319509624280091479af312e08c64e87401c2220c3e45e6ccf6fed0813c22500897690d841a02faf4eee56beb40c68fbfc9bee7ba9179cb077f778b8c2
     HEAD_REF main
     PATCHES
         fix-mxl-matroska-meta.patch
