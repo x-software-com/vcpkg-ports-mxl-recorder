@@ -9,7 +9,7 @@ vcpkg_from_gitlab(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO gstreamer/gstreamer
     REF "${VERSION}"
-    SHA512 6b429a319509624280091479af312e08c64e87401c2220c3e45e6ccf6fed0813c22500897690d841a02faf4eee56beb40c68fbfc9bee7ba9179cb077f778b8c2
+    SHA512 5ca978cad5a661b081528be0fa74e199115c186afa1a0c9f55a9238fb2b452b680e75e8721a54077b9f4d717da5ef5801c359a0a89a5a02056caea067adab88f
     HEAD_REF main
     PATCHES
         fix-mxl-matroska-meta.patch
@@ -28,6 +28,7 @@ vcpkg_from_gitlab(
         fix-bz2-windows-debug-dependency.patch
         no-downloads.patch
         ${PATCHES}
+		fix-multiple-def.patch
 )
 
 vcpkg_find_acquire_program(FLEX)
@@ -49,6 +50,7 @@ if(VCPKG_TARGET_IS_OSX)
         message(WARNING "'bison' upgrade is required. Please check the https://stackoverflow.com/a/35161881")
     endif()
 endif()
+
 # XSO features
 
 if(VCPKG_TARGET_IS_LINUX)
@@ -195,6 +197,7 @@ vcpkg_configure_meson(
         -Dgstreamer:coretracers=disabled
         -Dgstreamer:benchmarks=disabled
         -Dgstreamer:gst_debug=true
+        -Dgstreamer:ptp-helper=disabled  # needs rustc toolchain setup
         # gst-plugins-base
         -Dgst-plugins-base:gl_winsys=${PLUGIN_BASE_WINDOW_SYSTEM}
         -Dgst-plugins-base:gl_platform=${PLUGIN_BASE_GL_PLATFORM}
@@ -219,7 +222,7 @@ vcpkg_configure_meson(
         -Dgst-plugins-good:pulse=${PLUGIN_GOOD_PULSE}
         -Dgst-plugins-good:qt5=disabled
         -Dgst-plugins-good:shout2=disabled
-        # -Dgst-plugins-good:soup=disabled
+        #-Dgst-plugins-good:soup=disabled 
         -Dgst-plugins-good:twolame=disabled
         -Dgst-plugins-good:waveform=auto
         -Dgst-plugins-good:wavpack=disabled # Error during plugin build
@@ -301,10 +304,11 @@ vcpkg_configure_meson(
         -Dgst-plugins-bad:isac=disabled
     OPTIONS_RELEASE
         -Dgobject-cast-checks=disabled
-        # Glib asserts, glib checks and GStreamer extra checks are not disabled in ArchLinux build:
-        # https://gitlab.archlinux.org/archlinux/packaging/packages/gstreamer/-/blob/f7119550d0f1355d6df96112082d79dcb5299df5/PKGBUILD
+        # Glib asserts are not disabled in ArchLinux build: https://gitlab.archlinux.org/archlinux/packaging/packages/gstreamer/-/blob/f7119550d0f1355d6df96112082d79dcb5299df5/PKGBUILD
         # -Dglib-asserts=disabled
+        # Disabling the glib checks leads to a problem with the MXL player where the streams are not synchronized when starting playback.
         # -Dglib-checks=disabled
+        # GStreamer extra checks are not disabled in ArchLinux build: https://gitlab.archlinux.org/archlinux/packaging/packages/gstreamer/-/blob/f7119550d0f1355d6df96112082d79dcb5299df5/PKGBUILD
         # -Dgstreamer:extra-checks=disabled
     ADDITIONAL_BINARIES
         flex='${FLEX}'
@@ -321,7 +325,7 @@ file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/include/KHR"
                     "${CURRENT_PACKAGES_DIR}/include/GL"
 )
 
-if(NOT VCPKG_TARGET_IS_LINUX AND "plugins-base" IN_LIST FEATURES)
+if("plugins-base" IN_LIST FEATURES)
     file(RENAME "${CURRENT_PACKAGES_DIR}/lib/gstreamer-1.0/include/gst/gl/gstglconfig.h"
                 "${CURRENT_PACKAGES_DIR}/include/gstreamer-1.0/gst/gl/gstglconfig.h"
     )
@@ -428,6 +432,13 @@ if(VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
         string(REPLACE [[pluginsdir=${libdir}/gstreamer-1.0]] "pluginsdir=\${prefix}/plugins/${PORT}" _contents "${_contents}")
         file(WRITE "${_file}" "${_contents}")
     endif()
+endif()
+
+if(EXISTS "${CURRENT_PACKAGES_DIR}/lib/pkgconfig/gstreamer-gl-1.0.pc")
+  vcpkg_replace_string("${CURRENT_PACKAGES_DIR}/lib/pkgconfig/gstreamer-gl-1.0.pc" [[${libinc}]] "")
+endif()
+if(EXISTS "${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig/gstreamer-gl-1.0.pc")
+  vcpkg_replace_string("${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig/gstreamer-gl-1.0.pc" [[${libinc}]] "")
 endif()
 
 vcpkg_fixup_pkgconfig()
