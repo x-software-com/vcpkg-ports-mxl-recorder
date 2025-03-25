@@ -1,6 +1,6 @@
 {
   "name": "gstreamer",
-  "version": "1.24.12",
+  "version": "1.26.0",
   "port-version": 3,
   "description": "GStreamer open-source multimedia framework core library",
   "homepage": "https://gstreamer.freedesktop.org/",
@@ -60,6 +60,20 @@
       "supports": "!windows",
       "dependencies": [
         "aom",
+        {
+          "name": "gstreamer",
+          "default-features": false,
+          "features": [
+            "plugins-bad"
+          ]
+        }
+      ]
+    },
+    "svt-av1": {
+      "description": "Enable support for the SVT AV1 encoder",
+      "supports": "!windows",
+      "dependencies": [
+        "svt-av1",
         {
           "name": "gstreamer",
           "default-features": false,

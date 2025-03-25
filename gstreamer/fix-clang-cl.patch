@@ -1,8 +1,17 @@
 diff --git a/meson.build b/meson.build
-index 1316366ed..daeaf3cb1 100644
+index bd84ef82e0..9a23b0bd2b 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -62,7 +62,7 @@ endif
+@@ -68,7 +68,7 @@ endif
+ documented_projects = ''
+ # Make it possible to use msys2 built zlib which fails
+ # when not using the mingw toolchain as it uses unistd.h
+-if not meson.is_subproject() and cc.get_id() == 'msvc'
++if not meson.is_subproject() and cc.get_argument_syntax() == 'msvc'
+   uname = find_program('uname', required: false)
+   if uname.found()
+     ret = run_command(uname, '-o', check: false)
+@@ -88,7 +88,7 @@ endif
  # Ensure that MSVC interprets all source code as UTF-8. Only do this when we're
  # not a subproject, because subprojects are not allowed to call
  # add_global_arguments().
@@ -11,7 +20,7 @@ index 1316366ed..daeaf3cb1 100644
    add_global_arguments(
        cc.get_supported_arguments(['/utf-8']), # set the input encoding to utf-8
        language: ['c', 'cpp'])
-@@ -316,7 +316,7 @@ if get_option('default_library') == 'static'
+@@ -480,7 +480,7 @@ if building_full
      if cc.has_link_argument(link_arg)
        gstfull_link_args += link_arg
        link_deps += symbol_map

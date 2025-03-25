@@ -1,8 +1,8 @@
 diff --git a/subprojects/gst-plugins-bad/ext/dts/meson.build b/subprojects/gst-plugins-bad/ext/dts/meson.build
-index c4868a4..6b34cb7 100644
+index dc884e03ab..82bfc53ba6 100644
 --- a/subprojects/gst-plugins-bad/ext/dts/meson.build
 +++ b/subprojects/gst-plugins-bad/ext/dts/meson.build
-@@ -20,7 +20,7 @@ if not dca_dep.found()
+@@ -37,7 +37,7 @@ if not dca_dep.found()
  endif
  
  no_warn_c_args = []
@@ -11,37 +11,107 @@ index c4868a4..6b34cb7 100644
    # autotools didn't use the libdca pkg-config cflags, and they
    # can point to a non-existing location (/usr/include/dca)
    no_warn_c_args = ['-Wno-missing-include-dirs']
+diff --git a/subprojects/gst-plugins-bad/ext/webrtcdsp/meson.build b/subprojects/gst-plugins-bad/ext/webrtcdsp/meson.build
+index f6bf69ec20..f96c297444 100644
+--- a/subprojects/gst-plugins-bad/ext/webrtcdsp/meson.build
++++ b/subprojects/gst-plugins-bad/ext/webrtcdsp/meson.build
+@@ -32,7 +32,7 @@ endif
+ if not webrtc_dep.found()
+   # Try again, and this time use fallback if requested and possible
+   cc = meson.get_compiler('cpp')
+-  if cc.get_id() == 'msvc'
++  if cc.get_argument_syntax() == 'msvc'
+     # MSVC doesn't like designated initalizers without c++20
+     default_cppstd = 'cpp_std=c++20'
+   endif
+diff --git a/subprojects/gst-plugins-bad/gst-libs/gst/cuda/meson.build b/subprojects/gst-plugins-bad/gst-libs/gst/cuda/meson.build
+index 3a2524420b..dc090f88f4 100644
+--- a/subprojects/gst-plugins-bad/gst-libs/gst/cuda/meson.build
++++ b/subprojects/gst-plugins-bad/gst-libs/gst/cuda/meson.build
+@@ -92,7 +92,7 @@ if host_system == 'windows'
+   gstcuda_platform_dep += [advapi32_lib]
+ 
+   # MinGW 32bits build workaround
+-  if cc.get_id() != 'msvc'
++  if cc.get_argument_syntax() != 'msvc'
+     extra_args += cc.get_supported_arguments([
+       '-Wno-redundant-decls',
+     ])
+diff --git a/subprojects/gst-plugins-bad/gst-libs/gst/d3d11/meson.build b/subprojects/gst-plugins-bad/gst-libs/gst/d3d11/meson.build
+index 42216c7aed..7b60bed42d 100644
+--- a/subprojects/gst-plugins-bad/gst-libs/gst/d3d11/meson.build
++++ b/subprojects/gst-plugins-bad/gst-libs/gst/d3d11/meson.build
+@@ -175,7 +175,7 @@ endif
+ 
+ # MinGW 32bits compiler seems to be complaining about redundant-decls
+ # when ComPtr is in use. Let's just disable the warning
+-if cc.get_id() != 'msvc'
++if cc.get_argument_syntax() != 'msvc'
+   extra_args = cc.get_supported_arguments([
+     '-Wno-redundant-decls',
+     # include/directxmath/DirectXMathMatrix.inl:1161:16: error: variable 'aa' set but not used
+diff --git a/subprojects/gst-plugins-bad/gst-libs/gst/d3dshader/meson.build b/subprojects/gst-plugins-bad/gst-libs/gst/d3dshader/meson.build
+index 90565ae39f..abd8f3290f 100644
+--- a/subprojects/gst-plugins-bad/gst-libs/gst/d3dshader/meson.build
++++ b/subprojects/gst-plugins-bad/gst-libs/gst/d3dshader/meson.build
+@@ -29,7 +29,7 @@ endforeach
+ 
+ # MinGW 32bits compiler seems to be complaining about redundant-decls
+ # when ComPtr is in use. Let's just disable the warning
+-if cc.get_id() != 'msvc'
++if cc.get_argument_syntax() != 'msvc'
+   extra_args += cc.get_supported_arguments([
+     '-Wno-redundant-decls',
+   ])
+@@ -39,7 +39,7 @@ hlsl_precompile_opt = get_option('d3d-hlsl-precompile')
+ 
+ hlsl_precompiled = []
+ fxc = find_program ('fxc', required : hlsl_precompile_opt)
+-if not hlsl_precompile_opt.disabled() and cc.get_id() == 'msvc' and fxc.found()
++if not hlsl_precompile_opt.disabled() and cc.get_argument_syntax() == 'msvc' and fxc.found()
+   subdir('converter-hlsl')
+   subdir('plugin-hlsl')
+   extra_args += ['-DHLSL_PRECOMPILED']
 diff --git a/subprojects/gst-plugins-bad/meson.build b/subprojects/gst-plugins-bad/meson.build
-index 6707dce..b8c6018 100644
+index 5c983c5f84..8781190f38 100644
 --- a/subprojects/gst-plugins-bad/meson.build
 +++ b/subprojects/gst-plugins-bad/meson.build
 @@ -54,7 +54,7 @@ endif
+ 
  cdata = configuration_data()
- cdata.set('ENABLE_NLS', 1)
  
 -if cc.get_id() == 'msvc'
 +if cc.get_argument_syntax() == 'msvc'
    msvc_args = [
        # Ignore several spurious warnings for things gstreamer does very commonly
        # If a warning is completely useless and spammy, use '/wdXXXX' to suppress it
-diff --git a/subprojects/gst-plugins-bad/sys/asio/meson.build b/subprojects/gst-plugins-bad/sys/asio/meson.build
-index c61ad4e..b30793c 100644
---- a/subprojects/gst-plugins-bad/sys/asio/meson.build
-+++ b/subprojects/gst-plugins-bad/sys/asio/meson.build
-@@ -15,7 +15,7 @@ endif
- 
- # FIXME: non-msvc is not tested, and unlikely supported yet because of
- # tool-chain issue
--if cxx.get_id() != 'msvc'
-+if cxx.get_argument_syntax() != 'msvc'
-   if asio_option.enabled()
-     error('asio plugin can only be built with MSVC')
-   else
 diff --git a/subprojects/gst-plugins-bad/sys/d3d11/meson.build b/subprojects/gst-plugins-bad/sys/d3d11/meson.build
-index ff557be..d5bf0db 100644
+index 2859ea3ea5..7cf1e11741 100644
 --- a/subprojects/gst-plugins-bad/sys/d3d11/meson.build
 +++ b/subprojects/gst-plugins-bad/sys/d3d11/meson.build
-@@ -118,7 +118,7 @@ endif
+@@ -152,7 +152,7 @@ endif
+ if d3d11_winapi_app
+   d3d11_sources += winapi_app_sources
+   extra_dep += [runtimeobject_lib]
+-  if cc.get_id() == 'msvc' and get_option('b_sanitize') == 'address'
++  if cc.get_argument_syntax() == 'msvc' and get_option('b_sanitize') == 'address'
+     extra_args += ['/bigobj']
+   endif
+ endif
+@@ -175,7 +175,7 @@ endif
+ 
+ # MinGW 32bits compiler seems to be complaining about redundant-decls
+ # when ComPtr is in use. Let's just disable the warning
+-if cc.get_id() != 'msvc'
++if cc.get_argument_syntax() != 'msvc'
+   extra_mingw_args = cc.get_supported_arguments([
+     '-Wno-redundant-decls',
+     # include/directxmath/DirectXMathMatrix.inl:1161:16: error: variable 'aa' set but not used
+diff --git a/subprojects/gst-plugins-bad/sys/dwrite/meson.build b/subprojects/gst-plugins-bad/sys/dwrite/meson.build
+index fb423426d4..d58571441d 100644
+--- a/subprojects/gst-plugins-bad/sys/dwrite/meson.build
++++ b/subprojects/gst-plugins-bad/sys/dwrite/meson.build
+@@ -92,7 +92,7 @@ endif
  
  # MinGW 32bits compiler seems to be complaining about redundant-decls
  # when ComPtr is in use. Let's just disable the warning
@@ -50,24 +120,11 @@ index ff557be..d5bf0db 100644
    extra_mingw_args = cc.get_supported_arguments([
      '-Wno-redundant-decls',
    ])
-diff --git a/subprojects/gst-plugins-bad/sys/mediafoundation/meson.build b/subprojects/gst-plugins-bad/sys/mediafoundation/meson.build
-index 6b9a059..40713ce 100644
---- a/subprojects/gst-plugins-bad/sys/mediafoundation/meson.build
-+++ b/subprojects/gst-plugins-bad/sys/mediafoundation/meson.build
-@@ -54,7 +54,7 @@ if host_system != 'windows' or mf_option.disabled()
-   subdir_done()
- endif
- 
--if cc.get_id() != 'msvc'
-+if cc.get_argument_syntax() != 'msvc'
-   if mf_option.enabled()
-     error('mediafoundation plugin can only be built with MSVC')
-   endif
 diff --git a/subprojects/gst-plugins-bad/sys/msdk/meson.build b/subprojects/gst-plugins-bad/sys/msdk/meson.build
-index 51bf953..e30e138 100644
+index 79e7200da5..4aad1d7de0 100644
 --- a/subprojects/gst-plugins-bad/sys/msdk/meson.build
 +++ b/subprojects/gst-plugins-bad/sys/msdk/meson.build
-@@ -175,12 +175,12 @@ if use_onevpl and have_mfx_ver205
+@@ -243,12 +243,12 @@ if use_onevpl and have_mfx_ver205
  endif
  
  if host_machine.system() == 'windows'
@@ -78,7 +135,133 @@ index 51bf953..e30e138 100644
    legacy_stdio_dep = cc.find_library('legacy_stdio_definitions', required: get_option('msdk'))
    msdk_deps = declare_dependency(dependencies: [gstd3d11_dep, legacy_stdio_dep])
 -  msdk_deps_found = gstd3d11_dep.found() and legacy_stdio_dep.found() and cc.get_id() == 'msvc'
-+  msdk_deps_found = d3d11_dep.found() and legacy_stdio_dep.found() and cc.get_argument_syntax() == 'msvc'
++  msdk_deps_found = gstd3d11_dep.found() and legacy_stdio_dep.found() and cc.get_argument_syntax() == 'msvc'
  else
    libdl_dep = cc.find_library('dl', required: get_option('msdk'))
    libgudev_dep = dependency('gudev-1.0', required: get_option('msdk'), allow_fallback: true)
+diff --git a/subprojects/gst-plugins-bad/sys/nvcodec/meson.build b/subprojects/gst-plugins-bad/sys/nvcodec/meson.build
+index 5010795da2..f787d35946 100644
+--- a/subprojects/gst-plugins-bad/sys/nvcodec/meson.build
++++ b/subprojects/gst-plugins-bad/sys/nvcodec/meson.build
+@@ -115,7 +115,7 @@ if gstd3d12_dep.found() and cc.has_header('d3d12video.h')
+   nvcodec_sources += nvcodec_d3d12_sources
+ endif
+ 
+-if cc.get_id() != 'msvc'
++if cc.get_argument_syntax() != 'msvc'
+   if host_system == 'windows'
+     # MinGW 32bits compiler seems to be complaining about redundant-decls
+     # when ComPtr is in use. Let's just disable the warning
+diff --git a/subprojects/gst-plugins-bad/sys/qsv/libmfx/meson.build b/subprojects/gst-plugins-bad/sys/qsv/libmfx/meson.build
+index f9950fde1b..f5fba63b5c 100644
+--- a/subprojects/gst-plugins-bad/sys/qsv/libmfx/meson.build
++++ b/subprojects/gst-plugins-bad/sys/qsv/libmfx/meson.build
+@@ -55,7 +55,7 @@ else
+ endif
+ 
+ # suppress build warnings
+-if cc.get_id() == 'msvc'
++if cc.get_argument_syntax() == 'msvc'
+   libmfx_extra_args += cc.get_supported_arguments([
+     '/wd4189', # local variable is initialized but not referenced
+   ])
+diff --git a/subprojects/gst-plugins-bad/sys/qsv/meson.build b/subprojects/gst-plugins-bad/sys/qsv/meson.build
+index bdc7df0355..2b6082030b 100644
+--- a/subprojects/gst-plugins-bad/sys/qsv/meson.build
++++ b/subprojects/gst-plugins-bad/sys/qsv/meson.build
+@@ -109,7 +109,7 @@ endif
+ # suppress deprecated use of MFXInitEx. We don't use the method,
+ # but used in "mfxvideo++.h"
+ # and MinGW 32bits compiler seems to be complaining about redundant-decls
+-if cc.get_id() != 'msvc'
++if cc.get_argument_syntax() != 'msvc'
+   extra_args += cc.get_supported_arguments([
+     '-Wno-redundant-decls',
+     '-Wno-deprecated-declarations',
+diff --git a/subprojects/gst-plugins-bad/sys/va/meson.build b/subprojects/gst-plugins-bad/sys/va/meson.build
+index 05e338a441..83550b7f2d 100644
+--- a/subprojects/gst-plugins-bad/sys/va/meson.build
++++ b/subprojects/gst-plugins-bad/sys/va/meson.build
+@@ -121,7 +121,7 @@ else
+ endif
+ 
+ # MSVC does not understand c99
+-if cc.get_id() == 'msvc'
++if cc.get_argument_syntax() == 'msvc'
+   c_std_arg = ['c_std=c11']
+ endif
+ 
+diff --git a/subprojects/gst-plugins-bad/sys/wasapi/meson.build b/subprojects/gst-plugins-bad/sys/wasapi/meson.build
+index 335fefbab3..d5fb23f330 100644
+--- a/subprojects/gst-plugins-bad/sys/wasapi/meson.build
++++ b/subprojects/gst-plugins-bad/sys/wasapi/meson.build
+@@ -48,7 +48,7 @@ if ole32_dep.found() and ksuser_dep.found() and have_audioclient_h
+ 
+   # MinGW defines some of these GUIDs in headers, whereas with MSVC we're
+   # expected to define them in the code. Check which ones we need to provide.
+-  if cc.get_id() != 'msvc'
++  if cc.get_argument_syntax() != 'msvc'
+     if cc.has_header_symbol('audioclient.h', 'IID_IAudioClient')
+       wasapi_args += ['-DHAVE_AUDCLNT_GUIDS']
+     endif
+diff --git a/subprojects/gst-plugins-bad/sys/webview2/meson.build b/subprojects/gst-plugins-bad/sys/webview2/meson.build
+index 781ef11959..690da4aa14 100644
+--- a/subprojects/gst-plugins-bad/sys/webview2/meson.build
++++ b/subprojects/gst-plugins-bad/sys/webview2/meson.build
+@@ -32,7 +32,7 @@ if not gstd3d11_dep.found() or not gstd3d12_dep.found()
+   subdir_done()
+ endif
+ 
+-if cc.get_id() != 'msvc'
++if cc.get_argument_syntax() != 'msvc'
+   if webview2_option.enabled()
+     error('webview2 plugin supports only MSVC build.')
+   endif
+diff --git a/subprojects/gst-plugins-bad/sys/wic/meson.build b/subprojects/gst-plugins-bad/sys/wic/meson.build
+index f9e16c8815..1394f5a93e 100644
+--- a/subprojects/gst-plugins-bad/sys/wic/meson.build
++++ b/subprojects/gst-plugins-bad/sys/wic/meson.build
+@@ -32,7 +32,7 @@ if host_system != 'windows' or wic_option.disabled()
+   subdir_done()
+ endif
+ 
+-if cc.get_id() != 'msvc'
++if cc.get_argument_syntax() != 'msvc'
+   if wic_option.enabled()
+     error('wic plugin can only be built with MSVC')
+   endif
+diff --git a/subprojects/gst-plugins-bad/tests/check/meson.build b/subprojects/gst-plugins-bad/tests/check/meson.build
+index f996fb8ed4..ee116a0be4 100644
+--- a/subprojects/gst-plugins-bad/tests/check/meson.build
++++ b/subprojects/gst-plugins-bad/tests/check/meson.build
+@@ -221,7 +221,7 @@ gst_plugin_scanner_path = join_paths(gst_plugin_scanner_dir, 'gst-plugin-scanner
+ extra_args = cc.get_supported_arguments(['-Wno-aggregate-return'])
+ 
+ # XXX: our MinGW 32bits toolchain complians when ComPtr is in use
+-if host_system == 'windows' and cc.get_id() != 'msvc'
++if host_system == 'windows' and cc.get_argument_syntax() != 'msvc'
+   mingw_args = cc.get_supported_arguments([
+     '-Wno-redundant-decls',
+   ])
+diff --git a/subprojects/gst-plugins-bad/tests/examples/d3d12/meson.build b/subprojects/gst-plugins-bad/tests/examples/d3d12/meson.build
+index 1a0b19bc73..7b24736d2c 100644
+--- a/subprojects/gst-plugins-bad/tests/examples/d3d12/meson.build
++++ b/subprojects/gst-plugins-bad/tests/examples/d3d12/meson.build
+@@ -43,7 +43,7 @@ if gstd3d12_dep.found()
+   endif
+ endif
+ 
+-if cc.get_id() == 'msvc' and have_dcomp_h and dcomp_dep.found() and \
++if cc.get_argument_syntax() == 'msvc' and have_dcomp_h and dcomp_dep.found() and \
+     have_d3d11_h and d3d11_dep.found() and have_dxgi_h and dxgi_dep.found()
+   executable('d3d12swapchainsink-win32', 'd3d12swapchainsink-win32.cpp',
+     c_args : gst_plugins_bad_args + ['-DGST_USE_UNSTABLE_API'],
+@@ -71,7 +71,7 @@ foreach h: winrt_comp_headers
+   endif
+ endforeach
+ 
+-if cc.get_id() == 'msvc' and have_winrt_comp_headers and \
++if cc.get_argument_syntax() == 'msvc' and have_winrt_comp_headers and \
+     runtimeobject_dep.found() and coremessaging_lib.found()
+   executable('d3d12swapchainsink-winrt', 'd3d12swapchainsink-winrt.cpp',
+     c_args : gst_plugins_bad_args + ['-DGST_USE_UNSTABLE_API'],

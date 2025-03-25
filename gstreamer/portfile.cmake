@@ -9,7 +9,7 @@ vcpkg_from_gitlab(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO gstreamer/gstreamer
     REF "${VERSION}"
-    SHA512 5ca978cad5a661b081528be0fa74e199115c186afa1a0c9f55a9238fb2b452b680e75e8721a54077b9f4d717da5ef5801c359a0a89a5a02056caea067adab88f
+    SHA512 d6d5aba18e735a02f333dcb38c56adb5e8a1b913c2a0a9a830b70b850f8f78d638dc6491e9596ae2ae87fe7f1a7b0c1ca750dfa15e4980234502f7c367a8c20e
     HEAD_REF main
     PATCHES
         fix-mxl-matroska-meta.patch
@@ -236,7 +236,7 @@ vcpkg_configure_meson(
         -Dgst-plugins-bad:avtp=disabled
         -Dgst-plugins-bad:androidmedia=auto
         -Dgst-plugins-bad:applemedia=auto
-        -Dgst-plugins-bad:asio-sdk-path=${PLUGIN_BAD_ASIO_SDK_PATH}
+        # -Dgst-plugins-bad:asio-sdk-path=${PLUGIN_BAD_ASIO_SDK_PATH}
         -Dgst-plugins-bad:bluez=disabled
         -Dgst-plugins-bad:bs2b=disabled
         -Dgst-plugins-bad:curl=disabled # Error during plugin build
