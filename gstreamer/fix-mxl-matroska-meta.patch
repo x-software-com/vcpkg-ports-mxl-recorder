@@ -1,28 +1,8 @@
 diff --git a/subprojects/gst-plugins-good/gst/matroska/matroska-mux.c b/subprojects/gst-plugins-good/gst/matroska/matroska-mux.c
-index e2436d6c0c..817f00f196 100644
+index e2436d6c0c..b0a5f977d3 100644
 --- a/subprojects/gst-plugins-good/gst/matroska/matroska-mux.c
 +++ b/subprojects/gst-plugins-good/gst/matroska/matroska-mux.c
-@@ -320,6 +320,19 @@ gst_matroska_mux_class_init (GstMatroskaMuxClass * klass)
-   GstElementClass *gstelement_class;
-   GstAggregatorClass *gstaggregator_class;
- 
-+  gst_tag_register_static ("GEOMETRY", GST_TAG_FLAG_META, G_TYPE_STRING,
-+      "GEOMETRY", "The stream geometry.", NULL);
-+  gst_tag_register_static ("SOURCE_ID", GST_TAG_FLAG_META, G_TYPE_STRING,
-+      "SOURCE_ID", "The stream source id.", NULL);
-+  gst_tag_register_static ("NEXT_UUID", GST_TAG_FLAG_META, G_TYPE_STRING,
-+      "NEXT_UUID", "Next file UUID.", NULL);
-+  gst_tag_register_static ("CURRENT_UUID", GST_TAG_FLAG_META, G_TYPE_STRING,
-+      "CURRENT_UUID", "Current file UUID.", NULL);
-+  gst_tag_register_static ("PREVIOUS_UUID", GST_TAG_FLAG_META, G_TYPE_STRING,
-+      "PREVIOUS_UUID", "Previous file UUID.", NULL);
-+  gst_tag_register_static ("RECORDER_MACHINE_ID", GST_TAG_FLAG_META, G_TYPE_STRING,
-+      "RECORDER_MACHINE_ID", "The recorder machine id.", NULL);
-+
-   gobject_class = (GObjectClass *) klass;
-   gstelement_class = (GstElementClass *) klass;
-   gstaggregator_class = (GstAggregatorClass *) klass;
-@@ -3440,6 +3453,12 @@ gst_matroska_tag_conv[] = {
+@@ -3440,6 +3440,12 @@ gst_matroska_tag_conv[] = {
        GST_MATROSKA_TAG_ID_COMPOSER, GST_TAG_COMPOSER}, {
        GST_MATROSKA_TAG_ID_LEAD_PERFORMER, GST_TAG_PERFORMER}, {
        GST_MATROSKA_TAG_ID_GENRE, GST_TAG_GENRE}
