@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v2025.3.19 - 2025-07-01
+#### Features
+- add port of SVT-AV1 Encoder - (6f19595) - marcbull
+#### Miscellaneous Chores
+- the registration of tags has been removed from the matroska patch - (be2a0ad) - acpiccolo
+- update gstreamer port - (1a6b0a1) - acpiccolo
+- add missing original port for pipewire - (99349c3) - acpiccolo
+- add pipewire port - (4d14d25) - acpiccolo
+- removed deprecated svt-av1-gestreamer-plugin - (3b00502) - acpiccolo
+- update gstreamer to 1.26.0 and svt-av1 to 3.0.1 - (3897542) - acpiccolo
+- update gstreamer to vcpkg version 2025.01.13 - (1b210bf) - marcbull
+- update GStreamer to 1.24.10 - (af4921b) - marcbull
+
+- - -
+
 ## v2024.10.21 - 2024-12-05
 #### Build system
 - update GStreamer to 1.24.9 - (6ba8868) - marcbull
