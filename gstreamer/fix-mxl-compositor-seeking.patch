@@ -1,0 +1,44 @@
+diff --git a/subprojects/gst-plugins-base/gst/compositor/compositor.c b/subprojects/gst-plugins-base/gst/compositor/compositor.c
+index 54a2e9dc58..8624a65f76 100644
+--- a/subprojects/gst-plugins-base/gst/compositor/compositor.c
++++ b/subprojects/gst-plugins-base/gst/compositor/compositor.c
+@@ -1930,6 +1930,31 @@ _sink_query (GstAggregator * agg, GstAggregatorPad * bpad, GstQuery * query)
+   }
+ }
+ 
++static gboolean
++_src_query(GstAggregator *agg, GstQuery *query)
++{
++  switch (GST_QUERY_TYPE(query))
++  {
++  case GST_QUERY_SEEKING:
++  {
++      GstFormat fmt;
++      gint64 len;
++
++      gst_query_parse_seeking(query, &fmt, NULL, NULL, &len);
++
++      if (fmt == GST_FORMAT_TIME) {
++        GST_DEBUG("Compositor set seeking with len %d", len);
++        gst_query_set_seeking(query, fmt, TRUE, 0, len);
++        return TRUE;
++      }
++      break;
++  }
++  default:
++      break;
++  }
++  return GST_AGGREGATOR_CLASS(parent_class)->src_query(agg, query);
++}
++
+ static void
+ gst_compositor_finalize (GObject * object)
+ {
+@@ -1961,6 +1986,7 @@ gst_compositor_class_init (GstCompositorClass * klass)
+   gstelement_class->release_pad =
+       GST_DEBUG_FUNCPTR (gst_compositor_release_pad);
+   agg_class->sink_query = _sink_query;
++  agg_class->src_query = _src_query;
+   agg_class->src_event = _src_event;
+   agg_class->fixate_src_caps = _fixate_caps;
+   agg_class->negotiated_src_caps = _negotiated_caps;

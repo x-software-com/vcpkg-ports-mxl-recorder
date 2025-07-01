@@ -1,0 +1,54 @@
+diff --git a/subprojects/gst-plugins-bad/gst-libs/gst/play/gstplay.c b/subprojects/gst-plugins-bad/gst-libs/gst/play/gstplay.c
+index f99bbe1bcd..2b8eeb9b44 100644
+--- a/subprojects/gst-plugins-bad/gst-libs/gst/play/gstplay.c
++++ b/subprojects/gst-plugins-bad/gst-libs/gst/play/gstplay.c
+@@ -2975,6 +2975,9 @@ gst_play_seek_internal_locked (GstPlay * self)
+ 
+   flags |= GST_SEEK_FLAG_FLUSH;
+ 
++  // Enable these flags to get a not exact, snappier seeking:
++  // flags |= GST_SEEK_FLAG_SNAP_BEFORE | GST_SEEK_FLAG_KEY_UNIT;
++
+   accurate = gst_play_config_get_seek_accurate (self->config);
+ 
+   if (accurate) {
+diff --git a/subprojects/gst-plugins-good/gst/matroska/matroska-demux.c b/subprojects/gst-plugins-good/gst/matroska/matroska-demux.c
+index ef19f98978..424658be5a 100644
+--- a/subprojects/gst-plugins-good/gst/matroska/matroska-demux.c
++++ b/subprojects/gst-plugins-good/gst/matroska/matroska-demux.c
+@@ -2794,6 +2794,8 @@ gst_matroska_demux_handle_seek_event (GstMatroskaDemux * demux,
+   if (pad)
+     track = gst_pad_get_element_private (pad);
+ 
++  track = gst_matroska_read_common_get_seek_track(&demux->common, track);
++
+   GST_DEBUG_OBJECT (demux, "Have seek %" GST_PTR_FORMAT, event);
+ 
+   gst_event_parse_seek (event, &rate, &format, &flags, &cur_type, &cur,
+diff --git a/subprojects/gst-plugins-good/gst/matroska/matroska-read-common.c b/subprojects/gst-plugins-good/gst/matroska/matroska-read-common.c
+index e1e35dc058..7996a88a65 100644
+--- a/subprojects/gst-plugins-good/gst/matroska/matroska-read-common.c
++++ b/subprojects/gst-plugins-good/gst/matroska/matroska-read-common.c
+@@ -733,17 +733,20 @@ gst_matroska_read_common_get_seek_track (GstMatroskaReadCommon * common,
+ {
+   gint i;
+ 
+-  if (track && track->type == GST_MATROSKA_TRACK_TYPE_VIDEO)
++  if (track && track->type == GST_MATROSKA_TRACK_TYPE_VIDEO && !strncmp(gst_pad_get_name(track->pad), "video_0", strlen("video_0"))) {
++    GST_DEBUG_OBJECT(track->pad, "Selected %s track for seeking", gst_pad_get_name(track->pad));
+     return track;
++  }
+ 
+   for (i = 0; i < common->src->len; i++) {
+     GstMatroskaTrackContext *stream;
+ 
+     stream = g_ptr_array_index (common->src, i);
+-    if (stream->type == GST_MATROSKA_TRACK_TYPE_VIDEO && stream->index_table)
++    if (stream->type == GST_MATROSKA_TRACK_TYPE_VIDEO && stream->index_table && !strncmp(gst_pad_get_name(stream->pad), "video_0", strlen("video_0")))
+       track = stream;
+   }
+ 
++  GST_DEBUG_OBJECT(track->pad, "Selected %s track for seeking", gst_pad_get_name(track->pad));
+   return track;
+ }
+ 
