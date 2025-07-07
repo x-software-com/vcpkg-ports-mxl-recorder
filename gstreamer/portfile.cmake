@@ -195,7 +195,7 @@ vcpkg_configure_meson(
         -Dgtk_doc=disabled
 
         # gstreamer
-        -Dgstreamer:check=disabled
+        -Dgstreamer:check=enabled # Enable to provide the unit testing helper library for GStreamer modules
         -Dgstreamer:libunwind=disabled
         -Dgstreamer:libdw=disabled
         -Dgstreamer:dbghelp=disabled
